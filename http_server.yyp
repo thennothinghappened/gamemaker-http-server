@@ -2,6 +2,7 @@
   "resources": [
     {"id":{"name":"array_find","path":"scripts/array_find/array_find.yy",},"order":2,},
     {"id":{"name":"array_join","path":"scripts/array_join/array_join.yy",},"order":1,},
+    {"id":{"name":"String","path":"scripts/String/String.yy",},"order":4,},
     {"id":{"name":"string_slice","path":"scripts/string_slice/string_slice.yy",},"order":3,},
     {"id":{"name":"oServer","path":"objects/oServer/oServer.yy",},"order":0,},
     {"id":{"name":"network_create_buffer","path":"scripts/network_create_buffer/network_create_buffer.yy",},"order":0,},

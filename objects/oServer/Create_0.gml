@@ -2,12 +2,18 @@
 
 #macro version "1.0"
 
+draw_enable_drawevent(false);
+
 accepted_methods = [
 	"GET", "POST"
 ];
 methods_length = array_length(accepted_methods);
 
 port = 8080;
+var config_filename = working_directory+"config.json";
+
+//if (file_exists()
+
 server = network_create_server_raw(network_socket_tcp, port, 1013);
 
 // Create the list of illegal files
