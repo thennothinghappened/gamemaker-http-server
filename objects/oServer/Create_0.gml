@@ -1,6 +1,6 @@
 /// @desc terrible HTTP web server by thennothing
 
-#macro version "1.2"
+#macro version "1.2.1"
 
 ////////////////////////
 //   STRING TESTING   //

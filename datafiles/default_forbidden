@@ -8,6 +8,8 @@
 /forbidden
 /config.json
 /http_server.win
+/data.win
+/http_server.exe
 /http_server.yydebug
 /options.ini
 /README!!.txt
@@ -18,3 +20,4 @@ Unless you plan to allow the user more access, I don't recommend changing these.
 Put any new items in the below list.
 
 -- User List --
+/egg/this_is_illegal.txt
