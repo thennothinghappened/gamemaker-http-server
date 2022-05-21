@@ -1,0 +1,8 @@
+{
+    "port": 8080,
+    "use_forbidden": true,
+    "use_directory_viewer": true,
+    "draw_game_window": false,
+    "unformatted_page_css": "",
+    "server_speed": 60
+}

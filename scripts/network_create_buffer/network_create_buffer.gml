@@ -5,6 +5,8 @@ global.statuses = {
 	"s400": "400 Bad Request",
 	"s403": "403 Forbidden",
 	"s404": "404 Not Found",
+	"s405": "405 Method Not Allowed",
+	"s429": "429 Too Many Requests",
 	"s431": "431 Request Header Fields Too Large",
 		
 	"s500": "500 Internal Server Error",
@@ -12,36 +14,20 @@ global.statuses = {
 	"s508": "508 Loop Detected"
 };
 
-//function network_create_buffer(headers, body) {
-	
-//	var body_is_raw = !is_string(body);
-	
-//	var payload = array_join(headers, "\n");
-//	if (!body_is_raw) payload += "\n"+body;
-	
-//	var b = buffer_create(string_byte_length(payload)+1+body_is_raw?buffer_get_size(body):0, buffer_fixed, 1);
-//	buffer_write(b, buffer_text, payload);
-//	if (body_is_raw) {
-//		buffer_copy(body, 0, buffer_get_size(body), b, string_byte_length(payload)+1);
-//	}
-	
-//	return b;
-//}
-
 function http_create_packet(status, headers, body) {
 	
 	var body_is_raw = !is_string(body);
 	var b;
 	
 	if !body_is_raw {
-		var payload = "HTTP/1.1 " + get_status_name(status) + "\n" + array_join(headers, "\n") + "\nContent-Length: " + string(string_length(body));
-		payload += "\n\n"+body;
+		var payload = "HTTP/1.1 " + get_status_name(status) + "\r\n" + array_join(headers, "\r\n") + "\r\nContent-Length: " + string(string_length(body));
+		payload += "\r\n\r\n"+body;
 	
 		b = buffer_create(string_byte_length(payload)+1, buffer_fixed, 1);
 		buffer_write(b, buffer_text, payload);
 	} else {
 		
-		var payload = "HTTP/1.1 " + get_status_name(status) + "\n" + array_join(headers, "\n") + "\nContent-Length: " + string(buffer_get_size(body))+"\n\n";
+		var payload = "HTTP/1.1 " + get_status_name(status) + "\r\n" + array_join(headers, "\r\n") + "\r\nContent-Length: " + string(buffer_get_size(body))+"\r\n\r\n";
 		
 		b = buffer_create(string_byte_length(payload)+buffer_get_size(body), buffer_fixed, 1);
 		buffer_write(b, buffer_text, payload);
@@ -59,15 +45,22 @@ function http_send_packet(socket, status, headers, body) {
 	
 	var packet = http_create_packet(status, headers, body);
 	network_send_raw(socket, packet, buffer_get_size(packet));
-	
+	//show_message(headers)
 	buffer_delete(packet);
 }
 
-function http_send_error(socket, status, error="") {
+function http_send_error(socket, status, error="", headers=[]) {
 	
-	http_send_packet(socket, status, [
-		"Content-Type: text/html; charset=utf-8"
-	], error == "" ? "" : html_template(get_status_name(status), get_status_name(status)+":<br><pre>"+error+"</pre>"));
+	var _h = headers;
+	
+	if (status != 501) {
+		array_push(_h, "Content-Type: text/html; charset=utf-8");
+		http_send_packet(socket, status, _h, error == "" ? "" : html_template(get_status_name(status), "<h1>"+get_status_name(status)+":</h1><pre>"+error+"</pre>", unformatted_page_css));
+	}
+	else {
+		array_push(_h, "Content-Type: application/json; charset=utf-8");
+		http_send_packet(socket, status, _h, json_stringify({"Error":{"Code":501,"Message":error}}));
+	}
 }
 
 function html_template(title, body, style=false) {
@@ -87,6 +80,7 @@ function content_type(filename) {
 		{ext: ["log"], type: "text/plain; charset=utf-8"},
 		{ext: ["pdf"], type: "application/pdf"},
 		{ext: ["zip"], type: "application/zip"},
+		{ext: ["json"], type: "application/json"},
 		
 		// Images
 		{ext: ["png"], type: "image/png"},
@@ -109,7 +103,7 @@ function content_type(filename) {
 			var c_ext = t.ext[o];
 			var ext_tester = string_copy(filename, string_length(filename)-string_length(c_ext), string_length(c_ext)+1);
 			
-			show_debug_message("Checking extension "+c_ext+": " + ext_tester);
+			//show_debug_message("Checking extension "+c_ext+": " + ext_tester);
 			
 			if (ext_tester == "."+c_ext) return t.type;
 		}
