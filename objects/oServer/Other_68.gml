@@ -20,7 +20,7 @@ if (buffer_size > max_request_bytes) {
 buffer_seek(buffer, buffer_seek_start, 0);
 var data = buffer_read(buffer, buffer_string);
 
-show_debug_message("-- Incoming Data ("+async_load[? "ip"]+") --\n\n"+data+"\n-- End Data --");
+show_debug_message("-- Incoming Data ("+async_load[? "ip"]+") --");
 
 var pl = new String(data);
 var h = pl.slice("\r\n");
@@ -31,7 +31,7 @@ var first_header = h[0];
 
 for (var i = 0; i < methods_length; i ++) {
 	
-	if first_header.starts_with(accepted_methods[i]) {
+	if first_header.to_upper().starts_with(accepted_methods[i]) {
 		http_method = accepted_methods[i];
 		break;
 	}
@@ -54,11 +54,7 @@ for (var i = 1; i < len; i ++) {
 	var temp_arr = temp_str.slice(":");
 	
 	// Check if invalid
-	if (array_length(temp_arr) < 2) {
-		
-		show_debug_message("Skipping invalid header: " + string(temp_arr));
-		continue;
-	}
+	if (array_length(temp_arr) < 2) continue;
 	
 	var name = make_safe_for_struct(temp_arr[0].to_lower().val);
 	array_delete(temp_arr, 0, 1);
@@ -79,6 +75,12 @@ if (array_find(allowed_hostnames, hd[$ "host"].val) == -1) {
 	http_send_error(socket, 470, "This Domain is not on the whitelist.");
 	exit;
 }
+
+show_debug_message(
+	h[0].val + 
+	"\nHost: " + hd[$ "host"].val + 
+	"\nUser-Agent: " + (hd[$ "user_agent"] == undefined ? "undefined" : hd[$ "user_agent"].val)
+);
 
 // Process GET requests
 if (http_method == "GET") {

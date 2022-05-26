@@ -48,6 +48,7 @@ function http_send_packet(socket, status, headers, body) {
 	var packet = http_create_packet(status, headers, body);
 	network_send_raw(socket, packet, buffer_get_size(packet));
 	buffer_delete(packet);
+	show_debug_message("\nHTTP "+get_status_name(status)+"\n----\n");
 }
 
 function http_send_error(socket, status, error="", headers=[]) {
