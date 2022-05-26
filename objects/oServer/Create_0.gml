@@ -1,6 +1,6 @@
 /// @desc terrible HTTP web server by thennothing
 
-#macro version "1.2.1"
+#macro version "1.2.3"
 
 ////////////////////////
 //   STRING TESTING   //
@@ -29,7 +29,10 @@ use_forbidden = false;
 use_directory_viewer = true;
 draw_game_window = false;
 unformatted_page_css = "";
+max_request_bytes = 2048;
 server_speed = 60;
+extra_headers = [];
+allowed_hostnames = ["localhost:8080", "127.0.0.1:8080"];
 
 // Attempt to load config file
 var config_filename = working_directory+"config.json";
@@ -46,6 +49,9 @@ if (file_exists(config_filename)) {
 		draw_game_window = struct_set_if_exists("draw_game_window", config, draw_game_window);
 		unformatted_page_css = struct_set_if_exists("unformatted_page_css", config, unformatted_page_css);
 		server_speed = struct_set_if_exists("server_speed", config, server_speed);
+		max_request_bytes = struct_set_if_exists("max_request_bytes", config, max_request_bytes);
+		extra_headers = struct_set_if_exists("extra_headers", config, extra_headers);
+		allowed_hostnames = struct_set_if_exists("allowed_hostnames", config, allowed_hostnames);
 	
 	} catch(e) {
 		// Somebody sucks at JSON.
@@ -68,7 +74,7 @@ game_set_speed(server_speed, gamespeed_fps);
 
 show_debug_message("Attempting to make a server on port " + string(port));
 // This one line has caused me hell with all the bugs on ARM64 GameMaker.
-server = network_create_server_raw(network_socket_tcp, port, 3);
+server = network_create_server_raw(network_socket_tcp, port, 1000);
 
 if (server < 0)
 	throw "FATAL: FAILED TO CREATE SERVER!";

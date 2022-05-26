@@ -1,4 +1,4 @@
-function String(val) constructor {
+function String(val="") constructor {
 	
 	self.val = val;
 	
@@ -44,6 +44,14 @@ function String(val) constructor {
 		return int64(self.val);
 	}
 	
+	static to_lower = function() {
+		return new String(string_lower(self.val));
+	}
+	
+	static to_upper = function() {
+		return new String(string_upper(self.val));
+	}
+	
 	static remove = function(index, count=1) {
 		return new String(self.substring(0, index-1).val+self.substring(index+count+1).val);
 	}
@@ -76,6 +84,14 @@ function String(val) constructor {
 	
 	static eq = function(other_string) {
 		return self.val == other_string.val;
+	}
+	
+	static trim = function(char) {
+		var temp_str = new String(self);
+		while (temp_str.starts_with(char)) temp_str = temp_str.substring(1);
+		while (temp_str.ends_with(char)) temp_str = temp_str.substring(0, temp_str.length()-1);
+		
+		return temp_str;
 	}
 	
 	static slice = function(slicer) {

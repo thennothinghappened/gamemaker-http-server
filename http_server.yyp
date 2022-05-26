@@ -1,10 +1,13 @@
 {
   "resources": [
+    {"id":{"name":"make_safe_for_struct","path":"scripts/make_safe_for_struct/make_safe_for_struct.yy",},"order":8,},
     {"id":{"name":"array_find","path":"scripts/array_find/array_find.yy",},"order":2,},
     {"id":{"name":"array_join","path":"scripts/array_join/array_join.yy",},"order":1,},
     {"id":{"name":"String","path":"scripts/String/String.yy",},"order":4,},
     {"id":{"name":"string_slice","path":"scripts/string_slice/string_slice.yy",},"order":3,},
     {"id":{"name":"struct_set_if_exists","path":"scripts/struct_set_if_exists/struct_set_if_exists.yy",},"order":5,},
+    {"id":{"name":"array_duplicate","path":"scripts/array_duplicate/array_duplicate.yy",},"order":7,},
+    {"id":{"name":"yyg_please_fix_file_exists_on_arm64_im_begging_you","path":"scripts/yyg_please_fix_file_exists_on_arm64_im_begging_you/yyg_please_fix_file_exists_on_arm64_im_begging_you.yy",},"order":6,},
     {"id":{"name":"oServer","path":"objects/oServer/oServer.yy",},"order":0,},
     {"id":{"name":"network_create_buffer","path":"scripts/network_create_buffer/network_create_buffer.yy",},"order":0,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
@@ -44,8 +47,8 @@
   ],
   "IncludedFiles": [
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"default_config.json","resourceType":"GMIncludedFile",},
-    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"default_forbidden","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"README!!.txt","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"default_forbidden","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2022.3.0.625",

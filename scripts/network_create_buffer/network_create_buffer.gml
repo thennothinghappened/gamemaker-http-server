@@ -6,8 +6,10 @@ global.statuses = {
 	"s403": "403 Forbidden",
 	"s404": "404 Not Found",
 	"s405": "405 Method Not Allowed",
+	"s413": "413 Payload Too Large",
 	"s429": "429 Too Many Requests",
 	"s431": "431 Request Header Fields Too Large",
+	"s470": "470 Domain Not Whitelisted", // I made this one up :P
 		
 	"s500": "500 Internal Server Error",
 	"s501": "501 Not Implemented",
@@ -39,13 +41,12 @@ function http_create_packet(status, headers, body) {
 
 function http_send_packet(socket, status, headers, body) {
 	
-	// auto apply these epic headers
+	// auto apply these epic headers :)
 	array_push(headers, "Server: GameMaker HTTP Server "+version);
 	array_push(headers, "Connection: Keep-Alive");
 	
 	var packet = http_create_packet(status, headers, body);
 	network_send_raw(socket, packet, buffer_get_size(packet));
-	//show_message(headers)
 	buffer_delete(packet);
 }
 
@@ -55,7 +56,7 @@ function http_send_error(socket, status, error="", headers=[]) {
 	
 	if (status != 501) {
 		array_push(_h, "Content-Type: text/html; charset=utf-8");
-		http_send_packet(socket, status, _h, error == "" ? "" : html_template(get_status_name(status), "<h1>"+get_status_name(status)+":</h1><pre>"+error+"</pre>", unformatted_page_css));
+		http_send_packet(socket, status, _h, error == "" ? "" : html_template(get_status_name(status), "<h1>"+get_status_name(status)+(error==""?"":":</h1><pre>"+error+"</pre>"), unformatted_page_css));
 	}
 	else {
 		array_push(_h, "Content-Type: application/json; charset=utf-8");
